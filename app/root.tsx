@@ -1,8 +1,9 @@
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import Navigation from "./components/Navigation";
-
 import "./tailwind.css";
+import { rootAuthLoader } from "@clerk/remix/ssr.server";
+import { ClerkApp } from "@clerk/remix";
 
 export const links: LinksFunction = () => [
 	{ rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -17,12 +18,12 @@ export const links: LinksFunction = () => [
 	},
 ];
 
-export default function App() {
+export const loader: LoaderFunction = (args) => rootAuthLoader(args);
+const App = () => {
 	return (
 		<html>
 			<head>
 				<Links />
-				<title>TodoApp</title>
 			</head>
 			<body>
 				<Navigation />
@@ -35,3 +36,5 @@ export default function App() {
 		</html>
 	);
 }
+
+export default ClerkApp(App);
